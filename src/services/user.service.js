@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const User = require("../models/user.model");
+const tokenService = require('./token.service');
 
 const SALT = 10;
 
@@ -18,7 +19,7 @@ async function signup({ name, email, password }) {
     passwordHash,
   });
 
-  return formatUser(user);
+  return buildAuthResponse(user);
 }
 
 async function signin({ email, password }) {
@@ -35,7 +36,17 @@ async function signin({ email, password }) {
     throw createHttpError(401, "Invalid email or password");
   }
 
-  return formatUser(user);
+  return buildAuthResponse(user);
+}
+
+function buildAuthResponse(user) {
+  const formattedUser = formatUser(user);
+  const token = tokenService.generateAccessToken(formattedUser);
+
+  return {
+    user: formattedUser,
+    token,
+  };
 }
 
 function formatUser(user) {

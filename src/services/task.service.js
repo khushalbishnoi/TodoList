@@ -8,7 +8,7 @@ async function getTasks(userId) {
   return tasks.map(formatTask);
 }
 
-async function createTask({ text, userId }) {
+async function createTask(userId, { text }) {
   await ensureUserExists(userId);
 
   const task = await Task.create({ text, user: userId });
@@ -41,7 +41,7 @@ async function toggleTask(id, userId) {
   return formatTask(task);
 }
 
-async function updateTask(id, { userId, ...updates }) {
+async function updateTask(id, userId, updates) {
   await ensureUserExists(userId);
 
   const task = await Task.findOneAndUpdate(

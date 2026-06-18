@@ -2,7 +2,7 @@ const taskService = require('../services/task.service');
 
 async function getTasks(req, res, next) {
   try {
-    const tasks = await taskService.getTasks(req.query.userId);
+    const tasks = await taskService.getTasks(req.user.id);
     res.json({ tasks });
   } catch (error) {
     next(error);
@@ -11,7 +11,7 @@ async function getTasks(req, res, next) {
 
 async function createTask(req, res, next) {
   try {
-    const task = await taskService.createTask(req.body);
+    const task = await taskService.createTask(req.user.id, req.body);
     res.status(201).json({ task });
   } catch (error) {
     next(error);
@@ -20,7 +20,7 @@ async function createTask(req, res, next) {
 
 async function completeTasks(req, res, next) {
   try {
-    const tasks = await taskService.completeTasks(req.body.userId, req.body.ids);
+    const tasks = await taskService.completeTasks(req.user.id, req.body.ids);
     res.json({ tasks });
   } catch (error) {
     next(error);
@@ -29,7 +29,7 @@ async function completeTasks(req, res, next) {
 
 async function toggleTask(req, res, next) {
   try {
-    const task = await taskService.toggleTask(req.params.id, req.body.userId);
+    const task = await taskService.toggleTask(req.params.id, req.user.id);
     res.json({ task });
   } catch (error) {
     next(error);
@@ -38,7 +38,7 @@ async function toggleTask(req, res, next) {
 
 async function updateTask(req, res, next) {
   try {
-    const task = await taskService.updateTask(req.params.id, req.body);
+    const task = await taskService.updateTask(req.params.id, req.user.id, req.body);
     res.json({ task });
   } catch (error) {
     next(error);
@@ -47,7 +47,7 @@ async function updateTask(req, res, next) {
 
 async function deleteTasks(req, res, next) {
   try {
-    const tasks = await taskService.deleteTasks(req.body.userId, req.body.ids);
+    const tasks = await taskService.deleteTasks(req.user.id, req.body.ids);
     res.json({ tasks });
   } catch (error) {
     next(error);
@@ -56,7 +56,7 @@ async function deleteTasks(req, res, next) {
 
 async function deleteTask(req, res, next) {
   try {
-    await taskService.deleteTask(req.params.id, req.body.userId);
+    await taskService.deleteTask(req.params.id, req.user.id);
     res.status(204).send();
   } catch (error) {
     next(error);
