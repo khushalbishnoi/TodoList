@@ -1,0 +1,17 @@
+const Joi = require('joi');
+
+const signupSchema = Joi.object({
+  name: Joi.string().trim().min(2).max(80).required(),
+  email: Joi.string().trim().lowercase().email().required(),
+  password: Joi.string().min(6).max(128).required(),
+});
+
+const signinSchema = Joi.object({
+  email: Joi.string().trim().lowercase().email().required(),
+  password: Joi.string().required(),
+});
+
+module.exports = {
+  signupSchema,
+  signinSchema,
+};
